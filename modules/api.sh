@@ -45,8 +45,8 @@ auth_request() {
     # echo "hash:[$ERP_API_TOKEN$USER_TOKEN]>sha256>[$HASH]"
     # echo "user id:[$USER_ID]"
     # echo "user token:[$USER_TOKEN]"
-    URL="$1"
-    RESPONSE=$(curl -X POST "$URL" \
+    URL_PATH="$1"
+    RESPONSE=$(curl -X POST "$ERP_API_URL/$URL_PATH" \
         --silent \
         -H 'accept: application/json' \
         -H 'Content-Type: application/json' \
@@ -79,24 +79,24 @@ api_auth() {
 }
 
 api_repertorio() {
-    auth_request "$ERP_API_URL/repertorio"
+    auth_request "repertorio"
 }
 
 api_sitios() {
-    auth_request "$ERP_API_URL/servicio/get/sitios"
+    auth_request "servicio/get/sitios"
 }
 
 api_salas() {
     ID_SITIO="$1"
-    auth_request "$ERP_API_URL/servicio/get/salas/$ID_SITIO"
+    auth_request "servicio/get/salas/$ID_SITIO"
 }
 
 api_interpretes() {
-    auth_request "$ERP_API_URL/servicio/get/interpretes"
+    auth_request "servicio/get/interpretes"
 }
 
 api_ritos() {
-    auth_request "$ERP_API_URL/servicio/get/ritos"
+    auth_request "servicio/get/ritos"
 }
 
 api_servicio-create() {
@@ -114,7 +114,7 @@ api_servicio-create() {
 
     read -r -p "Difunto: " DIFUNTO
 
-    RESPONSE=$(auth_request "$ERP_API_URL/servicio/create" "-d {
+    RESPONSE=$(auth_request "servicio/create" "-d {
         \"fecha\": \"$FECHA\", 
         \"hora\": \"$HORA\", 
         \"id_interpretes\": \"$ID_INTERPRETES\", 

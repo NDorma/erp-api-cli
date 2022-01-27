@@ -1,36 +1,7 @@
 #!/usr/bin/env bash
 
-reset=$(tput sgr0)
 
-declare -A COLORS
-COLORS[r]=$(tput setaf 1)
-COLORS[g]=$(tput setaf 2)
-COLORS[y]=$(tput setaf 3)
-COLORS[b]=$(tput setaf 4)
-
-# ----------------------------- helper functions ----------------------------- #
-
-_c() {
-    color=${COLORS[$1]}
-    echo -ne "$color${*:2}$reset"
-}
-
-_cn() {
-    # shellcheck disable=SC2005
-    echo "$(_c "$1" "${*:2}")"
-}
-
-_sudo-exec() {
-    command="${*:1}"
-    _header "$(echo "executing sudo command " && _c b "$command")"
-    eval "sudo $command"
-}
-
-_confirm() {
-    message=$(_c y "- $1" && echo " [y/N]")
-    read -r -p "$message" response
-    [ "$response" = "y" ]
-}
+source ./modules/helpers.sh
 
 # ----------------------------- invoke subcommand ---------------------------- #
 

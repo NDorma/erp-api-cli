@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-TMP_DIR=$(dirname "$(mktemp -u)")
-CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
-
 if [ ! "$ERP_API_URL" ]; then
     _cn r "env ERP_API_URL not defined"
     exit 1
@@ -13,35 +10,27 @@ if [ ! "$ERP_API_TOKEN" ]; then
     exit 1
 fi
 
-source ./modules/helpers.sh
-
 auth_request() {
-    if [ ! -f "$CREDENTIALS_FILE" ]; then
+    if ! check_credentials; then
         echo "run api auth first!"
         return 1
     fi
 
-    USER_ID=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f1)
-    USER_TOKEN=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2)
-    HASH=$(do_hash "$ERP_API_TOKEN$USER_TOKEN")
-
+    USER_ID=$(get_user_id_from_credentials_file)
+    HASH=$(get_hash_from_credentials_file)
     URL_PATH="$1"
-    RESPONSE=$(curl -X POST "$ERP_API_URL/$URL_PATH" \
+    curl -X POST "$ERP_API_URL/$URL_PATH" \
         --silent \
         -H 'accept: application/json' \
         -H 'Content-Type: application/json' \
         -H "usuario: $USER_ID" \
         -H "hash: $HASH" \
-        "${*:2}")
-
-    if check_response_error "$RESPONSE"; then
-        echo "$RESPONSE"
-    fi
+        "${*:2}"
 }
 
 api_auth() {
     read -r -p "Username:" USERNAME
-    echo -n Password:
+    echo -n "Password:"
     read -r -s PASSWORD
     echo
     RESPONSE=$(curl -X POST "$ERP_API_URL/user/authcheck" \
@@ -51,11 +40,11 @@ api_auth() {
         -d "{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}")
 
     if check_response_error "$RESPONSE"; then
+        print_response_errors "$RESPONSE"
+    else
         print_response_messages "$RESPONSE"
         print_response_data "$RESPONSE"
-        USER_TOKEN=$(echo "$RESPONSE" | jq --raw-output .data.usuario.token)
-        USER_ID=$(echo "$RESPONSE" | jq --raw-output .data.usuario.id)
-        echo "$USER_ID|$USER_TOKEN" >"$CREDENTIALS_FILE"
+        save_credentials_from_response "$RESPONSE"
     fi
 }
 
@@ -105,8 +94,5 @@ api_servicio-create() {
         \"nombre_difunto\": \"$DIFUNTO\"
     }")
 
-    if check_response_error "$RESPONSE"; then
-        print_response_messages "$RESPONSE"
-        print_response_data "$RESPONSE"
-    fi
+    process_response "$RESPONSE"
 }

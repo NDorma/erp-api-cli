@@ -69,10 +69,6 @@ api_ritos() {
     auth_request "servicio/get/ritos"
 }
 
-do_fzf() {
-    fzf --height 10 --header "$1" --reverse
-}
-
 api_servicio-create() {
     ID_SITIO=$(api_sitios | jq -r ".data.sitios[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el sitio" | cut -f1)
 
@@ -83,7 +79,7 @@ api_servicio-create() {
     if [ "$HTA" == true ]; then
         read -r -p "Lugar de ceremonia: " LUGAR_CEREMONIA
     fi
-    
+
     ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el tipo de servicio" | cut -f1)
     ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el rito" | cut -f1)
 
@@ -110,4 +106,18 @@ api_servicio-create() {
     }")
 
     format_response "$RESPONSE"
+}
+
+api_repertorio-search() {
+    CONTENT=$(get_cached_content "repertorio")
+    if [ ! "$CONTENT" ]; then
+        CONTENT="$(api_repertorio)"
+        set_cached_content "repertorio" "$CONTENT"
+    fi
+
+    echo "$CONTENT" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | fzf
+}
+
+api_cache-flush() {
+    flush_cache
 }

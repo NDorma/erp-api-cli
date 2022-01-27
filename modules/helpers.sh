@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+TMP_DIR=$(dirname "$(mktemp -u)")
+
 # ---------------------------- response functions ---------------------------- #
 
 check_response_error() {
@@ -32,7 +34,6 @@ format_response() {
 
 # --------------------------- credentials functions -------------------------- #
 
-TMP_DIR=$(dirname "$(mktemp -u)")
 CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
 
 do_hash() {
@@ -59,6 +60,28 @@ get_hash_from_credentials_file() {
     do_hash "$ERP_API_TOKEN$USER_TOKEN"
 }
 
+# ------------------------------ cache functions ----------------------------- #
+
+get_cached_content() {
+    KEY="$1"
+    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
+
+    if [ -f "$CACHE_FILENAME" ]; then
+        cat "$CACHE_FILENAME"
+    fi
+}
+
+set_cached_content() {
+    KEY="$1"
+    CONTENT="${*:2}"
+    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
+    echo "$CONTENT" >"$CACHE_FILENAME"
+}
+
+flush_cache() {
+    find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2> /dev/null
+}
+
 # -------------------------------- ui funtions ------------------------------- #
 
 reset=$(tput sgr0)
@@ -83,4 +106,8 @@ _confirm() {
     message=$(_c y "- $1" && echo " [y/N]")
     read -r -p "$message" response
     [ "$response" = "y" ]
+}
+
+do_fzf() {
+    fzf --height 10 --header "$1" --reverse
 }

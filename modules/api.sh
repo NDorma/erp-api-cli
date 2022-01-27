@@ -20,23 +20,23 @@ do_hash() {
     echo -n "$1" | sha256sum | cut -d ' ' -f1
 }
 
-process_response() {
+check_response_error() {
     RESPONSE="$1"
     ERROR=$(echo "$RESPONSE" | jq .error)
-    
+
     if [ "$ERROR" == true ]; then
-        _cn r "Error"
+        _cn r "Errors"
         echo "$RESPONSE" | jq .errors
-        exit 1
+        return 1
     fi
 
-    echo "$RESPONSE"
+    return 0
 }
 
 auth_request() {
     if [ ! -f "$CREDENTIALS_FILE" ]; then
         echo "run api auth first!"
-        exit 1
+        return 1
     fi
 
     USER_ID=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f1)
@@ -54,14 +54,9 @@ auth_request() {
         -H "hash: $HASH" \
         "${*:2}")
 
-    ERROR=$(echo "$RESPONSE" | jq .error)
-    if [ "$ERROR" == true ]; then
-        echo "Error:"
-        echo "$RESPONSE" | jq .errors
-        exit 1
+    if check_response_error "$RESPONSE"; then
+        echo "$RESPONSE"
     fi
-
-    echo "$RESPONSE"
 }
 
 api_auth() {
@@ -75,18 +70,12 @@ api_auth() {
         -H 'Content-Type: application/json' \
         -d "{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}")
 
-    error=$(echo "$RESPONSE" | jq .error)
-    if [ "$error" == true ]; then
-        echo "Error:"
-        echo "$RESPONSE" | jq .errors
-        exit 1
+    if check_response_error "$RESPONSE"; then
+        echo "$RESPONSE" | jq .
+        USER_TOKEN=$(echo "$RESPONSE" | jq --raw-output .data.usuario.token)
+        USER_ID=$(echo "$RESPONSE" | jq --raw-output .data.usuario.id)
+        echo "$USER_ID|$USER_TOKEN" >"$CREDENTIALS_FILE"
     fi
-
-    USER_TOKEN=$(echo "$RESPONSE" | jq --raw-output .data.usuario.token)
-    USER_ID=$(echo "$RESPONSE" | jq --raw-output .data.usuario.id)
-    echo "$USER_ID|$USER_TOKEN" >"$CREDENTIALS_FILE"
-
-    echo "$RESPONSE" | jq .
 }
 
 api_repertorio() {
@@ -115,14 +104,14 @@ api_servicio-create() {
     ID_SALA=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione la sala" | cut -f1)
     ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el tipo de servicio" | cut -f1)
     ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el rito" | cut -f1)
-    
+
     DFECHA=$(date +'%Y-%m-%d')
     DHORA=$(date +'%H:%M')
     read -r -p "Fecha (yyyy-mm-dd) [$DFECHA]: " FECHA
     read -r -p "Hora (hh:mm) [$DHORA]: " HORA
     FECHA=${FECHA:-$DFECHA}
     HORA=${HORA:-$DHORA}
-    
+
     read -r -p "Difunto: " DIFUNTO
 
     RESPONSE=$(auth_request "$ERP_API_URL/servicio/create" "-d {
@@ -135,5 +124,5 @@ api_servicio-create() {
         \"nombre_difunto\": \"$DIFUNTO\"
     }")
 
-    process_response "$RESPONSE"
+    check_response_error "$RESPONSE"
 }

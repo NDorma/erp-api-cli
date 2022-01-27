@@ -71,7 +71,15 @@ api_ritos() {
 
 api_servicio-create() {
     ID_SITIO=$(api_sitios | jq -r ".data.sitios[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el sitio" | cut -f1)
-    ID_SALA=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione la sala" | cut -f1)
+
+    SALA_SELECTION=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .nombre, .has_texto_adicional] | @tsv" | fzf --height 20 --header "Seleccione la sala")
+    ID_SALA=$(echo "$SALA_SELECTION" | cut -f1)
+    HTA=$(echo "$SALA_SELECTION" | cut -f3)
+    LUGAR_CEREMONIA=""
+    if [ "$HTA" == true ]; then
+        read -r -p "Lugar de ceremonia: " LUGAR_CEREMONIA
+    fi
+    
     ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el tipo de servicio" | cut -f1)
     ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el rito" | cut -f1)
 
@@ -84,6 +92,8 @@ api_servicio-create() {
 
     read -r -p "Difunto: " DIFUNTO
 
+    _cn y "Creando servicio..."
+
     RESPONSE=$(auth_request "servicio/create" "-d {
         \"fecha\": \"$FECHA\", 
         \"hora\": \"$HORA\", 
@@ -91,6 +101,7 @@ api_servicio-create() {
         \"id_rito\": \"$ID_RITO\", 
         \"id_sitio\": \"$ID_SITIO\", 
         \"id_sala\": \"$ID_SALA\", 
+        \"lugar_ceremonia\": \"$LUGAR_CEREMONIA\", 
         \"nombre_difunto\": \"$DIFUNTO\"
     }")
 

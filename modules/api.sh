@@ -94,5 +94,5 @@ api_servicio-create() {
         \"nombre_difunto\": \"$DIFUNTO\"
     }")
 
-    process_response "$RESPONSE"
+    format_response "$RESPONSE"
 }

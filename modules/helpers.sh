@@ -21,7 +21,7 @@ print_response_data() {
     echo "$*" | jq -r ".data"
 }
 
-process_response() {
+format_response() {
     if check_response_error "$*"; then
         print_response_errors "$*"
     else

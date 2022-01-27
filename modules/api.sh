@@ -25,12 +25,19 @@ check_response_error() {
     ERROR=$(echo "$RESPONSE" | jq .error)
 
     if [ "$ERROR" == true ]; then
-        _cn r "Errors"
-        echo "$RESPONSE" | jq .errors
+        _cn r "$(echo "$RESPONSE" | jq -r ".errors | @tsv" | tr "\t" "\n")"
         return 1
     fi
 
     return 0
+}
+
+print_response_messages() {
+    _cn g "$(echo "$1" | jq -r ".messages | @tsv" | tr "\t" "\n")"
+}
+
+print_response_data() {
+    echo "$1" | jq -r ".data"
 }
 
 auth_request() {
@@ -71,7 +78,8 @@ api_auth() {
         -d "{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}")
 
     if check_response_error "$RESPONSE"; then
-        echo "$RESPONSE" | jq .
+        print_response_messages "$RESPONSE"
+        print_response_data "$RESPONSE"
         USER_TOKEN=$(echo "$RESPONSE" | jq --raw-output .data.usuario.token)
         USER_ID=$(echo "$RESPONSE" | jq --raw-output .data.usuario.id)
         echo "$USER_ID|$USER_TOKEN" >"$CREDENTIALS_FILE"
@@ -124,5 +132,8 @@ api_servicio-create() {
         \"nombre_difunto\": \"$DIFUNTO\"
     }")
 
-    check_response_error "$RESPONSE"
+    if check_response_error "$RESPONSE"; then
+        print_response_messages "$RESPONSE"
+        print_response_data "$RESPONSE"
+    fi
 }

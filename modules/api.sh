@@ -69,19 +69,23 @@ api_ritos() {
     auth_request "servicio/get/ritos"
 }
 
-api_servicio-create() {
-    ID_SITIO=$(api_sitios | jq -r ".data.sitios[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el sitio" | cut -f1)
+do_fzf() {
+    fzf --height 10 --header "$1" --reverse
+}
 
-    SALA_SELECTION=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .nombre, .has_texto_adicional] | @tsv" | fzf --height 20 --header "Seleccione la sala")
+api_servicio-create() {
+    ID_SITIO=$(api_sitios | jq -r ".data.sitios[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el sitio" | cut -f1)
+
+    SALA_SELECTION=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .has_texto_adicional, .nombre] | @tsv" | do_fzf "Seleccione la sala")
     ID_SALA=$(echo "$SALA_SELECTION" | cut -f1)
-    HTA=$(echo "$SALA_SELECTION" | cut -f3)
+    HTA=$(echo "$SALA_SELECTION" | cut -f2)
     LUGAR_CEREMONIA=""
     if [ "$HTA" == true ]; then
         read -r -p "Lugar de ceremonia: " LUGAR_CEREMONIA
     fi
     
-    ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el tipo de servicio" | cut -f1)
-    ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el rito" | cut -f1)
+    ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el tipo de servicio" | cut -f1)
+    ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el rito" | cut -f1)
 
     DFECHA=$(date +'%Y-%m-%d')
     DHORA=$(date +'%H:%M')

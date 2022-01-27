@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# ERP_API_URL="https://test.erp.ndorma.com/api"
-# ERP_API_TOKEN="421c76d77563afa1914846b010bd164f395bd34c2102e5e99e0cb9cf173c1d87"
+TMP_DIR=$(dirname "$(mktemp -u)")
+CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
 
 if [ ! "$ERP_API_URL" ]; then
     _cn r "env ERP_API_URL not defined"
@@ -13,32 +13,7 @@ if [ ! "$ERP_API_TOKEN" ]; then
     exit 1
 fi
 
-TMP_DIR=$(dirname "$(mktemp -u)")
-CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
-
-do_hash() {
-    echo -n "$1" | sha256sum | cut -d ' ' -f1
-}
-
-check_response_error() {
-    RESPONSE="$1"
-    ERROR=$(echo "$RESPONSE" | jq .error)
-
-    if [ "$ERROR" == true ]; then
-        _cn r "$(echo "$RESPONSE" | jq -r ".errors | @tsv" | tr "\t" "\n")"
-        return 1
-    fi
-
-    return 0
-}
-
-print_response_messages() {
-    _cn g "$(echo "$1" | jq -r ".messages | @tsv" | tr "\t" "\n")"
-}
-
-print_response_data() {
-    echo "$1" | jq -r ".data"
-}
+source ./modules/helpers.sh
 
 auth_request() {
     if [ ! -f "$CREDENTIALS_FILE" ]; then
@@ -49,9 +24,7 @@ auth_request() {
     USER_ID=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f1)
     USER_TOKEN=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2)
     HASH=$(do_hash "$ERP_API_TOKEN$USER_TOKEN")
-    # echo "hash:[$ERP_API_TOKEN$USER_TOKEN]>sha256>[$HASH]"
-    # echo "user id:[$USER_ID]"
-    # echo "user token:[$USER_TOKEN]"
+
     URL_PATH="$1"
     RESPONSE=$(curl -X POST "$ERP_API_URL/$URL_PATH" \
         --silent \

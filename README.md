@@ -28,3 +28,14 @@ export ERP_API_TOKEN="..."
 
 # seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
 ```
+
+## Buscador de piezas
+
+```sh
+./erp.sh api repertorio-search
+```
+## Buscador de piezas
+
+```sh
+./erp.sh api cache-flush
+```

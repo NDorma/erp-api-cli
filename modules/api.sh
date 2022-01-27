@@ -115,8 +115,14 @@ api_servicio-create() {
     ID_SALA=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione la sala" | cut -f1)
     ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el tipo de servicio" | cut -f1)
     ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | fzf --height 20 --header "Seleccione el rito" | cut -f1)
-    read -r -p "Escribe la fecha (yyyy-mm-dd): " FECHA
-    read -r -p "Escribe la hora (hh:mm): " HORA
+    
+    DFECHA=$(date +'%Y-%m-%d')
+    DHORA=$(date +'%H:%M')
+    read -r -p "Fecha (yyyy-mm-dd) [$DFECHA]: " FECHA
+    read -r -p "Hora (hh:mm) [$DHORA]: " HORA
+    FECHA=${FECHA:-$DFECHA}
+    HORA=${HORA:-$DHORA}
+    
     read -r -p "Difunto: " DIFUNTO
 
     RESPONSE=$(auth_request "$ERP_API_URL/servicio/create" "-d {

@@ -78,6 +78,20 @@ set_cached_content() {
     echo "$CONTENT" >"$CACHE_FILENAME"
 }
 
+remember_content() {
+    KEY="$1"
+    CALLABLE="${*:2}"
+    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
+
+    CONTENT=$(get_cached_content "$KEY")
+    if [ ! "$CONTENT" ]; then
+        CONTENT="$(eval "$CALLABLE")"
+        set_cached_content "$KEY" "$CONTENT"
+    fi
+
+    echo "$CONTENT"
+}
+
 flush_cache() {
     find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2> /dev/null
 }

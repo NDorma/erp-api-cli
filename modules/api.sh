@@ -109,13 +109,7 @@ api_servicio-create() {
 }
 
 api_repertorio-search() {
-    CONTENT=$(get_cached_content "repertorio")
-    if [ ! "$CONTENT" ]; then
-        CONTENT="$(api_repertorio)"
-        set_cached_content "repertorio" "$CONTENT"
-    fi
-
-    echo "$CONTENT" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | fzf
+    remember_content "repertorio" "api_repertorio" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | fzf
 }
 
 api_cache-flush() {

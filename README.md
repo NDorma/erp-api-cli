@@ -34,7 +34,7 @@ export ERP_API_TOKEN="..."
 ```sh
 ./erp.sh api repertorio-search
 ```
-## Buscador de piezas
+## Limpiar la cache
 
 ```sh
 ./erp.sh api cache-flush

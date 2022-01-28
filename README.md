@@ -3,7 +3,7 @@
 ## Instalación
 
 ```sh
-git clone https://github.com/NDorma/erp-api-cli.git && cd erp-api-cli
+git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 ```
 
 ## Configuración

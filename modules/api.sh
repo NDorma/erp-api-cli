@@ -109,7 +109,7 @@ api_servicio-create() {
 }
 
 api_repertorio-search() {
-    remember_content "repertorio" "api_repertorio" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | fzf
+    remember_content "repertorio" "api_repertorio" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | sed 's/\t/@|@/g' | column -s '@' -t | fzf
 }
 
 api_cache-flush() {

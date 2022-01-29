@@ -8,7 +8,7 @@ check_response_error() {
     RESPONSE="$*"
     ERROR=$(echo "$RESPONSE" | jq .error)
 
-    [ "$ERROR" == true ]
+    [ "$ERROR" == false ]
 }
 
 print_response_errors() {
@@ -24,8 +24,11 @@ print_response_data() {
 }
 
 format_response() {
-    if check_response_error "$*"; then
+    local RESPONSE=$(check_response_error "$*")
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ]; then
         print_response_errors "$*"
+        return $RETVAL
     else
         print_response_messages "$*"
         print_response_data "$*"

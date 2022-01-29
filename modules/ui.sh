@@ -6,13 +6,7 @@ ui_login() {
     echo
     RESPONSE=$(plain_request "user/authcheck" -d "'{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}'")
 
-    if check_response_error "$RESPONSE"; then
-        print_response_errors "$RESPONSE"
-    else
-        print_response_messages "$RESPONSE"
-        print_response_data "$RESPONSE"
-        save_credentials_from_response "$RESPONSE"
-    fi
+    format_response "$RESPONSE" && save_credentials_from_response "$RESPONSE"
 }
 
 ui_logout() {

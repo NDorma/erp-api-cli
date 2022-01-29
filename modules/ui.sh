@@ -17,7 +17,7 @@ ui_sitios() {
     execute_and_check_oneliner "api_sitios" "jq -r \".data.sitios[] | [.id, .nombre] | @tsv\" | do_fzf"
 }
 
-ui_repertorio-search() {
+ui_repertorio() {
     execute_and_check_oneliner "remember_content repertorio api_repertorio" "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi"
 }
 

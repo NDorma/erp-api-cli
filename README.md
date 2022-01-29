@@ -21,6 +21,14 @@ export ERP_API_TOKEN="..."
 # introducir nombre de usuario y contraseña
 ```
 
+## Logout
+
+```sh
+./erp.sh api logout
+
+# introducir nombre de usuario y contraseña
+```
+
 ## Creación de servicios
 
 ```sh

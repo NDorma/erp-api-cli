@@ -25,11 +25,7 @@ auth_request() {
     HASH=$(get_hash_from_credentials_file)
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
-    if [ "$EXTRA_PARAMS" ]; then
-        curl --silent -X POST "$ERP_API_URL/$URL_PATH" -H 'accept: application/json' -H 'Content-Type: application/json' -H "usuario: $USER_ID" -H "hash: $HASH" "$EXTRA_PARAMS"
-    else
-        curl --silent -X POST "$ERP_API_URL/$URL_PATH" -H 'accept: application/json' -H 'Content-Type: application/json' -H "usuario: $USER_ID" -H "hash: $HASH"
-    fi
+    plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
 }
 
 api_auth() {
@@ -97,7 +93,7 @@ api_servicio-create() {
 
     _cn y "Creando servicio..."
 
-    RESPONSE=$(auth_request "servicio/create" "-d {
+    RESPONSE=$(auth_request "servicio/create" "-d '{
         \"fecha\": \"$FECHA\", 
         \"hora\": \"$HORA\", 
         \"id_interpretes\": \"$ID_INTERPRETES\", 
@@ -106,7 +102,7 @@ api_servicio-create() {
         \"id_sala\": \"$ID_SALA\", 
         \"lugar_ceremonia\": \"$LUGAR_CEREMONIA\", 
         \"nombre_difunto\": \"$DIFUNTO\"
-    }")
+    }'")
 
     format_response "$RESPONSE"
 }

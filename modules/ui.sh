@@ -6,7 +6,7 @@ ui_login() {
     else
         USERNAME="$1"
     fi
-    
+
     PASSWORD=$(_read_password "Password:" "*")
     echo
     RESPONSE=$(api_authcheck "$USERNAME" "$PASSWORD")
@@ -22,7 +22,12 @@ ui_sitios() {
 }
 
 ui_repertorio() {
-    execute_and_check_oneliner "remember_content repertorio api_repertorio" "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi"
+    execute_and_check_oneliner \
+        "remember_content repertorio api_repertorio" \
+        "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" \
+            | sed 's/\t/@|@/g' | column -s '@' -t \
+            | fzf --multi --reverse --preview \"echo Repertorio seleccionado:; cat {+f}\" --header 'multiselección con TAB' \
+            | cut -d '|' -f1 | xargs | sed -e 's/ /,/g'"
 }
 
 ui_servicio-create() {
@@ -51,6 +56,10 @@ ui_servicio-create() {
 
     read -r -p "Difunto: " DIFUNTO
 
+    if _confirm "Repertorio?"; then
+        REPERTORIO=$(ui_repertorio)
+    fi
+
     _cn y "Creando servicio..."
 
     RESPONSE=$(auth_request "servicio/create" "-d '{
@@ -61,7 +70,8 @@ ui_servicio-create() {
         \"id_sitio\": \"$ID_SITIO\", 
         \"id_sala\": \"$ID_SALA\", 
         \"lugar_ceremonia\": \"$LUGAR_CEREMONIA\", 
-        \"nombre_difunto\": \"$DIFUNTO\"
+        \"nombre_difunto\": \"$DIFUNTO\",
+        \"repertorio\": [$REPERTORIO]
     }'")
 
     format_response "$RESPONSE"

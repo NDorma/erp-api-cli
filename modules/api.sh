@@ -10,6 +10,12 @@ if [ ! "$ERP_API_TOKEN" ]; then
     return 1
 fi
 
+plain_request() {
+    URL_PATH="$1"
+    EXTRA_PARAMS="${*:2}"
+    eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
+}
+
 auth_request() {
     if ! check_credentials; then
         return "$ERROR_CREDENTIALS"
@@ -30,11 +36,7 @@ api_auth() {
     read -r -p "Username:" USERNAME
     PASSWORD=$(_read_password "Password:" "*")
     echo
-    RESPONSE=$(curl -X POST "$ERP_API_URL/user/authcheck" \
-        --silent \
-        -H 'accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -d "{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}")
+    RESPONSE=$(plain_request "user/authcheck" -d "'{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}'")
 
     if check_response_error "$RESPONSE"; then
         print_response_errors "$RESPONSE"

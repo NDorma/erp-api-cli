@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 ui_login() {
-    read -r -p "Username:" USERNAME
+    if [ "$1" == "" ]; then
+        read -r -p "Username:" USERNAME
+    else
+        USERNAME="$1"
+    fi
+    
     PASSWORD=$(_read_password "Password:" "*")
     echo
     RESPONSE=$(api_authcheck "$USERNAME" "$PASSWORD")

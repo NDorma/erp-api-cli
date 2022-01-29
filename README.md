@@ -40,7 +40,7 @@ export ERP_API_TOKEN="..."
 ## Buscador de piezas
 
 ```sh
-./cli.sh ui repertorio-search
+./cli.sh ui repertorio
 ```
 ## Limpiar la cache
 

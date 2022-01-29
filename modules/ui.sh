@@ -62,17 +62,18 @@ ui_servicio-create() {
 
     _cn y "Creando servicio..."
 
-    RESPONSE=$(auth_request "servicio/create" "-d '{
-        \"fecha\": \"$FECHA\", 
-        \"hora\": \"$HORA\", 
-        \"id_interpretes\": \"$ID_INTERPRETES\", 
-        \"id_rito\": \"$ID_RITO\", 
-        \"id_sitio\": \"$ID_SITIO\", 
-        \"id_sala\": \"$ID_SALA\", 
-        \"lugar_ceremonia\": \"$LUGAR_CEREMONIA\", 
-        \"nombre_difunto\": \"$DIFUNTO\",
-        \"repertorio\": [$REPERTORIO]
-    }'")
+    RESPONSE=$(
+        api_servicio-create \
+            -f "$FECHA" \
+            -h "$HORA" \
+            -i "$ID_INTERPRETES" \
+            -r "$ID_RITO" \
+            -s "$ID_SITIO" \
+            -t "$ID_SALA" \
+            -l "$LUGAR_CEREMONIA" \
+            -d "$DIFUNTO" \
+            -q "$REPERTORIO"
+    )
 
     format_response "$RESPONSE"
 }

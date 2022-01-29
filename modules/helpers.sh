@@ -85,8 +85,11 @@ remember_content() {
 
     CONTENT=$(get_cached_content "$KEY")
     if [ ! "$CONTENT" ]; then
-        CONTENT="$(eval "$CALLABLE")"
-        set_cached_content "$KEY" "$CONTENT"
+        if CONTENT="$($CALLABLE)"; then
+            set_cached_content "$KEY" "$CONTENT"
+        else 
+            return $?
+        fi
     fi
 
     echo "$CONTENT"

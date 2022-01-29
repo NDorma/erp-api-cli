@@ -48,6 +48,10 @@ api_auth() {
     fi
 }
 
+api_logout() {
+    rm "$CREDENTIALS_FILE"
+}
+
 api_repertorio() {
     auth_request "repertorio"
 }

@@ -28,8 +28,7 @@ auth_request() {
 
 api_auth() {
     read -r -p "Username:" USERNAME
-    echo -n "Password:"
-    read -r -s PASSWORD
+    PASSWORD=$(_read_password "Password:" "*")
     echo
     RESPONSE=$(curl -X POST "$ERP_API_URL/user/authcheck" \
         --silent \

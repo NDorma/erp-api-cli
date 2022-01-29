@@ -87,7 +87,7 @@ remember_content() {
     if [ ! "$CONTENT" ]; then
         if CONTENT="$($CALLABLE)"; then
             set_cached_content "$KEY" "$CONTENT"
-        else 
+        else
             return $?
         fi
     fi
@@ -117,6 +117,20 @@ _c() {
 _cn() {
     # shellcheck disable=SC2005
     echo "$(_c "$1" "${*:2}")"
+}
+
+_read_password() {
+    unset password
+    prompt="$1"
+    character="$2"
+    while IFS= read -p "$prompt" -r -s -n 1 char; do
+        if [[ $char == $'\0' ]]; then
+            break
+        fi
+        prompt="$character"
+        password+="$char"
+    done
+    echo "$password"
 }
 
 _confirm() {

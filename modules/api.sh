@@ -13,7 +13,11 @@ fi
 plain_request() {
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
-    eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
+    if [ "$DEBUG_CURL" == 1 ]; then
+        echo "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
+    else
+        eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
+    fi
 }
 
 auth_request() {

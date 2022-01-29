@@ -15,11 +15,11 @@ export ERP_API_URL="https://test.erp.ndorma.com/api"
 export ERP_API_TOKEN="..."
 ```
 
-> _Nota:_ El **ERP_API_TOKEN** se obtiene:
+> Nota: El **ERP_API_TOKEN** se obtiene:
 >
 > 1. Entrando en la **ERP**.
-> 2. Desde el menu, ir a **Admin** > **API** > *Admin de la API*.
-> 3. Copiar el token de la sección **API token**
+> 2. Ir a **Admin** > **API** > **Admin de la API** desde el menú superior.
+> 3. Copiar el token que se muestra en la sección **API token**
 
 ## Comandos
 

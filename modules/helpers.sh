@@ -24,7 +24,8 @@ print_response_data() {
 }
 
 format_response() {
-    local RESPONSE=$(check_response_error "$*")
+    local RESPONSE
+    RESPONSE=$(check_response_error "$*")
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
         print_response_errors "$*"

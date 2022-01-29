@@ -9,14 +9,16 @@ git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 ## Configuración
 
 ```sh
+# Incluir estas líneas en el ~/.bashrc o ~/.zshrc según la shell
+
 export ERP_API_URL="https://test.erp.ndorma.com/api"
 export ERP_API_TOKEN="..."
 ```
 
 > _Nota:_ El **ERP_API_TOKEN** se obtiene:
 >
-> 1. Entrando en la ERP.
-> 2. Desde el menu, ir a Admin > API > Admin de la API.
+> 1. Entrando en la **ERP**.
+> 2. Desde el menu, ir a **Admin** > **API** > *Admin de la API*.
 > 3. Copiar el token de la sección **API token**
 
 ## Comandos
@@ -39,7 +41,7 @@ export ERP_API_TOKEN="..."
 ```sh
 ./cli.sh ui servicio-create
 ```
-> Seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
+> Seleccionar sitio, sala, tipo de servicio, rito, fecha, hora, difunto y repertorio (opcional)
 
 ### Buscador / selector interactivo de piezas
 

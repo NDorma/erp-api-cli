@@ -2,12 +2,12 @@
 
 if [ ! "$ERP_API_URL" ]; then
     _cn r "env ERP_API_URL not defined"
-    exit 1
+    return 1
 fi
 
 if [ ! "$ERP_API_TOKEN" ]; then
     _cn r "env ERP_API_TOKEN not defined"
-    exit 1
+    return 1
 fi
 
 auth_request() {

@@ -69,7 +69,10 @@ api_ritos() {
 }
 
 api_servicio-create() {
-    ID_SITIO=$(api_sitios | jq -r ".data.sitios[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el sitio" | cut -f1)
+    if ! ID_SITIO=$(execute_and_check_oneliner "api_sitios" "jq -r \".data.sitios[] | [.id, .nombre] | @tsv\" | do_fzf 'Seleccione el sitio' | cut -f1"); then
+        echo "$ID_SITIO"
+        return 1
+    fi
 
     SALA_SELECTION=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .has_texto_adicional, .nombre] | @tsv" | do_fzf "Seleccione la sala")
     ID_SALA=$(echo "$SALA_SELECTION" | cut -f1)
@@ -122,12 +125,19 @@ execute_and_check() {
     fi
 }
 
-api_repertorio-search() {
-    if RESPONSE=$(execute_and_check "remember_content repertorio api_repertorio"); then
-        echo "$RESPONSE" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi
-    else
+execute_and_check_oneliner() {
+    RESPONSE=$(execute_and_check "$1")
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ]; then
         echo "$RESPONSE"
+        return $RETVAL
+    else
+        echo "$RESPONSE" | eval "${*:2}"
     fi
+}
+
+api_repertorio-search() {
+    execute_and_check_oneliner "remember_content repertorio api_repertorio" "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi"
 }
 
 api_cache-flush() {

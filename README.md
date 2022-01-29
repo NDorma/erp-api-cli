@@ -48,7 +48,7 @@ export ERP_API_TOKEN="..."
 ./cli.sh ui cache-flush
 ```
 
-# Debuging CURL
+# Debugging CURL
 
 Definiendo la variable DEBUG_CURL=1 antes de cada comando, se muestra el comando curl en lugar de ejecutarlo.
 

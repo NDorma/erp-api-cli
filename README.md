@@ -13,42 +13,40 @@ export ERP_API_URL="https://test.erp.ndorma.com/api"
 export ERP_API_TOKEN="..."
 ```
 
-> _Nota:_ El __ERP_API_TOKEN__ se obtiene:
+> _Nota:_ El **ERP_API_TOKEN** se obtiene:
+>
 > 1. Entrando en la ERP.
 > 2. Desde el menu, ir a Admin > API > Admin de la API.
-> 3. Copiar el token de la sección __API token__
+> 3. Copiar el token de la sección **API token**
 
 ## Comandos
 
 ### Login
 
 ```sh
-./cli.sh ui login
-
-# introducir nombre de usuario y contraseña
+./cli.sh ui login [username]
 ```
+> Introducir nombre de usuario (opcional) y contraseña será solicitada luego
 
 ### Logout
 
 ```sh
 ./cli.sh ui logout
-
-# introducir nombre de usuario y contraseña
 ```
 
 ### Creación interactiva de servicios
 
 ```sh
 ./cli.sh ui servicio-create
-
-# seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
 ```
+> Seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
 
-### Buscador/selector interactivo de piezas
+### Buscador / selector interactivo de piezas
 
 ```sh
 ./cli.sh ui repertorio
 ```
+
 ### Limpiar la cache
 
 ```sh
@@ -56,6 +54,7 @@ export ERP_API_TOKEN="..."
 ```
 
 ---
+
 ## Debugging CURL
 
 Definiendo la variable DEBUG_CURL=1 antes de cada comando, se muestra el comando curl en lugar de ejecutarlo.

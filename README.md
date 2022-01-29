@@ -16,7 +16,7 @@ export ERP_API_TOKEN="..."
 ## Login
 
 ```sh
-./erp.sh api auth
+./cli.sh ui login
 
 # introducir nombre de usuario y contraseña
 ```
@@ -24,7 +24,7 @@ export ERP_API_TOKEN="..."
 ## Logout
 
 ```sh
-./erp.sh api logout
+./cli.sh ui logout
 
 # introducir nombre de usuario y contraseña
 ```
@@ -32,7 +32,7 @@ export ERP_API_TOKEN="..."
 ## Creación de servicios
 
 ```sh
-./erp.sh api servicio-create
+./cli.sh ui servicio-create
 
 # seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
 ```
@@ -40,10 +40,10 @@ export ERP_API_TOKEN="..."
 ## Buscador de piezas
 
 ```sh
-./erp.sh api repertorio-search
+./cli.sh ui repertorio-search
 ```
 ## Limpiar la cache
 
 ```sh
-./erp.sh api cache-flush
+./cli.sh ui cache-flush
 ```

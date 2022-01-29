@@ -99,6 +99,34 @@ flush_cache() {
     find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2>/dev/null
 }
 
+# ------------------------- error handling functions ------------------------- #
+
+execute_and_check() {
+    RESPONSE=$(eval "$*")
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ]; then
+        if [ $RETVAL == "$ERROR_CREDENTIALS" ]; then
+            echo "Error de credenciales, ejectuta 'api auth' nuevamente"
+        fi
+
+        echo "Error code [$RETVAL]"
+        return $RETVAL
+    else
+        echo "$RESPONSE"
+    fi
+}
+
+execute_and_check_oneliner() {
+    RESPONSE=$(execute_and_check "$1")
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ]; then
+        echo "$RESPONSE"
+        return $RETVAL
+    else
+        echo "$RESPONSE" | eval "${*:2}"
+    fi
+}
+
 # -------------------------------- ui funtions ------------------------------- #
 
 reset=$(tput sgr0)

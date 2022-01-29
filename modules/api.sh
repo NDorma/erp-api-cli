@@ -16,21 +16,6 @@ plain_request() {
     eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
 }
 
-api_auth() {
-    read -r -p "Username:" USERNAME
-    PASSWORD=$(_read_password "Password:" "*")
-    echo
-    RESPONSE=$(plain_request "user/authcheck" -d "'{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}'")
-
-    if check_response_error "$RESPONSE"; then
-        print_response_errors "$RESPONSE"
-    else
-        print_response_messages "$RESPONSE"
-        print_response_data "$RESPONSE"
-        save_credentials_from_response "$RESPONSE"
-    fi
-}
-
 auth_request() {
     if ! check_credentials; then
         return "$ERROR_CREDENTIALS"
@@ -41,10 +26,6 @@ auth_request() {
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
     plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
-}
-
-api_logout() {
-    rm "$CREDENTIALS_FILE"
 }
 
 api_repertorio() {
@@ -66,80 +47,4 @@ api_interpretes() {
 
 api_ritos() {
     auth_request "servicio/get/ritos"
-}
-
-api_servicio-create() {
-    if ! ID_SITIO=$(execute_and_check_oneliner "api_sitios" "jq -r \".data.sitios[] | [.id, .nombre] | @tsv\" | do_fzf 'Seleccione el sitio' | cut -f1"); then
-        echo "$ID_SITIO"
-        return 1
-    fi
-
-    SALA_SELECTION=$(api_salas "$ID_SITIO" | jq -r ".data.salas[] | [.id, .has_texto_adicional, .nombre] | @tsv" | do_fzf "Seleccione la sala")
-    ID_SALA=$(echo "$SALA_SELECTION" | cut -f1)
-    HTA=$(echo "$SALA_SELECTION" | cut -f2)
-    LUGAR_CEREMONIA=""
-    if [ "$HTA" == true ]; then
-        read -r -p "Lugar de ceremonia: " LUGAR_CEREMONIA
-    fi
-
-    ID_INTERPRETES=$(api_interpretes | jq -r ".data.interpretes[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el tipo de servicio" | cut -f1)
-    ID_RITO=$(api_ritos | jq -r ".data.ritos[] | [.id, .nombre] | @tsv" | do_fzf "Seleccione el rito" | cut -f1)
-
-    DFECHA=$(date +'%Y-%m-%d')
-    DHORA=$(date +'%H:%M')
-    read -r -p "Fecha (yyyy-mm-dd) [$DFECHA]: " FECHA
-    read -r -p "Hora (hh:mm) [$DHORA]: " HORA
-    FECHA=${FECHA:-$DFECHA}
-    HORA=${HORA:-$DHORA}
-
-    read -r -p "Difunto: " DIFUNTO
-
-    _cn y "Creando servicio..."
-
-    RESPONSE=$(auth_request "servicio/create" "-d '{
-        \"fecha\": \"$FECHA\", 
-        \"hora\": \"$HORA\", 
-        \"id_interpretes\": \"$ID_INTERPRETES\", 
-        \"id_rito\": \"$ID_RITO\", 
-        \"id_sitio\": \"$ID_SITIO\", 
-        \"id_sala\": \"$ID_SALA\", 
-        \"lugar_ceremonia\": \"$LUGAR_CEREMONIA\", 
-        \"nombre_difunto\": \"$DIFUNTO\"
-    }'")
-
-    format_response "$RESPONSE"
-}
-
-execute_and_check() {
-    RESPONSE=$(eval "$*")
-    RETVAL=$?
-    if [ $RETVAL -ne 0 ]; then
-        if [ $RETVAL == "$ERROR_CREDENTIALS" ]; then
-            echo "Error de credenciales, ejectuta 'api auth' nuevamente"
-        fi
-
-        echo "Error code [$RETVAL]"
-        return $RETVAL
-    else
-        echo "$RESPONSE"
-    fi
-}
-
-execute_and_check_oneliner() {
-    RESPONSE=$(execute_and_check "$1")
-    RETVAL=$?
-    if [ $RETVAL -ne 0 ]; then
-        echo "$RESPONSE"
-        return $RETVAL
-    else
-        echo "$RESPONSE" | eval "${*:2}"
-    fi
-}
-
-api_repertorio-search() {
-    execute_and_check_oneliner "remember_content repertorio api_repertorio" "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi"
-}
-
-api_cache-flush() {
-    flush_cache
 }

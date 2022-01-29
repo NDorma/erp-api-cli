@@ -3,6 +3,8 @@
 # shellcheck disable=SC1091
 source ./modules/variables.sh
 source ./modules/helpers.sh
+source ./modules/api.sh
+source ./modules/ui.sh
 
 # ----------------------------- invoke subcommand ---------------------------- #
 
@@ -14,7 +16,5 @@ fi
 if [ "$(type -t "$1")" = function ]; then
     eval "$1" "${*:2}"
 else
-    # shellcheck disable=SC1090
-    source "./modules/$1.sh"
     eval "${1}_${*:2}"
 fi

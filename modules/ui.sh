@@ -4,8 +4,7 @@ ui_login() {
     read -r -p "Username:" USERNAME
     PASSWORD=$(_read_password "Password:" "*")
     echo
-    RESPONSE=$(plain_request "user/authcheck" -d "'{\"username\": \"$USERNAME\", \"password\": \"$PASSWORD\"}'")
-
+    RESPONSE=$(api_authcheck "$USERNAME" "$PASSWORD")
     format_response "$RESPONSE" && save_credentials_from_response "$RESPONSE"
 }
 

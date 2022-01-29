@@ -28,6 +28,10 @@ auth_request() {
     plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
 }
 
+api_authcheck() {
+    plain_request "user/authcheck" -d "'{\"username\": \"$1\", \"password\": \"$2\"}'"
+}
+
 api_repertorio() {
     auth_request "repertorio"
 }

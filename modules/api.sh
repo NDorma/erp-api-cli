@@ -19,13 +19,12 @@ auth_request() {
     USER_ID=$(get_user_id_from_credentials_file)
     HASH=$(get_hash_from_credentials_file)
     URL_PATH="$1"
-    curl -X POST "$ERP_API_URL/$URL_PATH" \
-        --silent \
-        -H 'accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -H "usuario: $USER_ID" \
-        -H "hash: $HASH" \
-        "${*:2}"
+    EXTRA_PARAMS="${*:2}"
+    if [ "$EXTRA_PARAMS" ]; then
+        curl --silent -X POST "$ERP_API_URL/$URL_PATH" -H 'accept: application/json' -H 'Content-Type: application/json' -H "usuario: $USER_ID" -H "hash: $HASH" "$EXTRA_PARAMS"
+    else
+        curl --silent -X POST "$ERP_API_URL/$URL_PATH" -H 'accept: application/json' -H 'Content-Type: application/json' -H "usuario: $USER_ID" -H "hash: $HASH"
+    fi
 }
 
 api_auth() {

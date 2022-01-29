@@ -107,20 +107,27 @@ api_servicio-create() {
     format_response "$RESPONSE"
 }
 
-api_repertorio-search() {
-    RESPONSE=$(remember_content "repertorio" "api_repertorio")
+execute_and_check() {
+    RESPONSE=$(eval "$*")
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
         if [ $RETVAL == "$ERROR_CREDENTIALS" ]; then
-            echo "Error en las credenciales, ejectuta 'api auth'"
+            echo "Error de credenciales, ejectuta 'api auth' nuevamente"
         fi
 
-        echo "Error code: $RETVAL"
+        echo "Error code [$RETVAL]"
         return $RETVAL
     else
-        echo "$RESPONSE" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi
+        echo "$RESPONSE"
     fi
+}
 
+api_repertorio-search() {
+    if RESPONSE=$(execute_and_check "remember_content repertorio api_repertorio"); then
+        echo "$RESPONSE" | jq -r ".data.piezas[] | [.id, .nombre, .autor] | @tsv" | sed 's/\t/@|@/g' | column -s '@' -t | fzf --multi
+    else
+        echo "$RESPONSE"
+    fi
 }
 
 api_cache-flush() {

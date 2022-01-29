@@ -16,18 +16,6 @@ plain_request() {
     eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
 }
 
-auth_request() {
-    if ! check_credentials; then
-        return "$ERROR_CREDENTIALS"
-    fi
-
-    USER_ID=$(get_user_id_from_credentials_file)
-    HASH=$(get_hash_from_credentials_file)
-    URL_PATH="$1"
-    EXTRA_PARAMS="${*:2}"
-    plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
-}
-
 api_auth() {
     read -r -p "Username:" USERNAME
     PASSWORD=$(_read_password "Password:" "*")
@@ -41,6 +29,18 @@ api_auth() {
         print_response_data "$RESPONSE"
         save_credentials_from_response "$RESPONSE"
     fi
+}
+
+auth_request() {
+    if ! check_credentials; then
+        return "$ERROR_CREDENTIALS"
+    fi
+
+    USER_ID=$(get_user_id_from_credentials_file)
+    HASH=$(get_hash_from_credentials_file)
+    URL_PATH="$1"
+    EXTRA_PARAMS="${*:2}"
+    plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
 }
 
 api_logout() {

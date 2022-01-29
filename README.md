@@ -13,7 +13,9 @@ export ERP_API_URL="https://test.erp.ndorma.com/api"
 export ERP_API_TOKEN="..."
 ```
 
-## Login
+## Comandos
+
+### Login
 
 ```sh
 ./cli.sh ui login
@@ -21,7 +23,7 @@ export ERP_API_TOKEN="..."
 # introducir nombre de usuario y contraseña
 ```
 
-## Logout
+### Logout
 
 ```sh
 ./cli.sh ui logout
@@ -29,7 +31,7 @@ export ERP_API_TOKEN="..."
 # introducir nombre de usuario y contraseña
 ```
 
-## Creación de servicios
+### Creación interactiva de servicios
 
 ```sh
 ./cli.sh ui servicio-create
@@ -37,18 +39,19 @@ export ERP_API_TOKEN="..."
 # seleccionar sitio, sala, tipo de servicio, rito, fecha, hora y difunto
 ```
 
-## Buscador de piezas
+### Buscador/selector interactivo de piezas
 
 ```sh
 ./cli.sh ui repertorio
 ```
-## Limpiar la cache
+### Limpiar la cache
 
 ```sh
 ./cli.sh ui cache-flush
 ```
 
-# Debugging CURL
+---
+## Debugging CURL
 
 Definiendo la variable DEBUG_CURL=1 antes de cada comando, se muestra el comando curl en lugar de ejecutarlo.
 

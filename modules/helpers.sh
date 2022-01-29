@@ -93,7 +93,7 @@ remember_content() {
 }
 
 flush_cache() {
-    find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2> /dev/null
+    find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2>/dev/null
 }
 
 # -------------------------------- ui funtions ------------------------------- #

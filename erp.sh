@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source ./modules/variables.sh
 source ./modules/helpers.sh
 
 # ----------------------------- invoke subcommand ---------------------------- #

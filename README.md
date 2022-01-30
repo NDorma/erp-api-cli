@@ -37,33 +37,33 @@ export ERP_API_TOKEN="..."
 ### Login
 
 ```sh
-./cli.sh ui login [username]
+./cli ui login [username]
 ```
 > Introducir nombre de usuario (opcional) y contraseña será solicitada luego
 
 ### Logout
 
 ```sh
-./cli.sh ui logout
+./cli ui logout
 ```
 
 ### Creación interactiva de servicios
 
 ```sh
-./cli.sh ui servicio-create
+./cli ui servicio-create
 ```
 > Seleccionar sitio, sala, tipo de servicio, rito, fecha, hora, difunto y repertorio (opcional)
 
 ### Buscador / selector interactivo de piezas
 
 ```sh
-./cli.sh ui repertorio
+./cli ui repertorio
 ```
 
 ### Limpiar la cache
 
 ```sh
-./cli.sh ui cache-flush
+./cli ui cache-flush
 ```
 
 ---
@@ -73,7 +73,7 @@ export ERP_API_TOKEN="..."
 Definiendo la variable EAC_DEBUG_CURL=1 antes de cada comando, se muestra el comando curl en lugar de ejecutarlo.
 
 ```sh
-EAC_DEBUG_CURL=1 ./cli.sh api repertorio
+EAC_DEBUG_CURL=1 ./cli api repertorio
 
 # curl --silent -X POST https://test.erp.ndorma.com/api/repertorio -H 'accept: application/json' -H 'Content-Type: application/json' -H 'usuario: 1' -H 'hash: 8b7f2076423ef84d44febf72718cbc73228107aa0d6d56da37aadac7783933ff'
 ```

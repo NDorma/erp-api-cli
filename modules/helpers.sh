@@ -12,11 +12,11 @@ check_response_error() {
 }
 
 print_response_errors() {
-    _cn r "$(echo "$*" | jq -r ".errors | @tsv" | tr "\t" "\n")"
+    echo "$*" | jq -r ".errors | @tsv" | tr "\t" "\n"
 }
 
 print_response_messages() {
-    _cn g "$(echo "$*" | jq -r ".messages | @tsv" | tr "\t" "\n")"
+    echo "$*" | jq -r ".messages | @tsv" | tr "\t" "\n"
 }
 
 print_response_data() {
@@ -28,10 +28,10 @@ format_response() {
     RESPONSE=$(check_response_error "$*")
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
-        print_response_errors "$*"
+        _cn r "$(print_response_errors "$*")"
         return $RETVAL
     else
-        print_response_messages "$*"
+        _cn g "$(print_response_messages "$*")"
         print_response_data "$*"
     fi
 }

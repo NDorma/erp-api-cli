@@ -1,15 +1,5 @@
 #!/usr/bin/env bash
 
-if [ ! "$ERP_API_URL" ]; then
-    _cn r "env ERP_API_URL not defined"
-    return 1
-fi
-
-if [ ! "$ERP_API_TOKEN" ]; then
-    _cn r "env ERP_API_TOKEN not defined"
-    return 1
-fi
-
 plain_request() {
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
@@ -68,39 +58,39 @@ api_servicio-create() {
 
     while true; do
         case "$1" in
-        --fecha|-f)
+        --fecha | -f)
             FECHA="$2"
             shift 2
             ;;
-        --hora|-h)
+        --hora | -h)
             HORA="$2"
             shift 2
             ;;
-        --sitio|-s)
+        --sitio | -s)
             ID_SITIO="$2"
             shift 2
             ;;
-        --sala|-t)
+        --sala | -t)
             ID_SALA="$2"
             shift 2
             ;;
-        --lugar|-l)
+        --lugar | -l)
             LUGAR_CEREMONIA="$2"
             shift 2
             ;;
-        --interpretes|-i)
+        --interpretes | -i)
             ID_INTERPRETES="$2"
             shift 2
             ;;
-        --rito|-r)
+        --rito | -r)
             ID_RITO="$2"
             shift 2
             ;;
-        --difunto|-d)
+        --difunto | -d)
             DIFUNTO="$2"
             shift 2
             ;;
-        --repertorio|-q)
+        --repertorio | -q)
             REPERTORIO="$2"
             shift 2
             ;;

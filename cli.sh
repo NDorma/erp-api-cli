@@ -6,6 +6,18 @@ source ./modules/helpers.sh
 source ./modules/api.sh
 source ./modules/ui.sh
 
+# ------------------------ environment variables check ----------------------- #
+
+if [ ! "$ERP_API_URL" ]; then
+    _cn r "env ERP_API_URL not defined"
+    exit 1
+fi
+
+if [ ! "$ERP_API_TOKEN" ]; then
+    _cn r "env ERP_API_TOKEN not defined"
+    exit 1
+fi
+
 # ----------------------------- invoke subcommand ---------------------------- #
 
 if [ "$1" = "" ]; then

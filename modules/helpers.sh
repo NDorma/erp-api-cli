@@ -110,7 +110,7 @@ execute_and_check() {
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
         if [ $RETVAL == "$ERROR_CREDENTIALS" ]; then
-            echo "Error de credenciales, ejectuta 'api auth' nuevamente"
+            echo "Error de credenciales, ejectuta '$0 ui login' nuevamente"
         fi
 
         echo "Error code [$RETVAL]"

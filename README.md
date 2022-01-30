@@ -6,6 +6,17 @@
 git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 ```
 
+## Dependencias
+
+- curl
+- find
+- fzf
+- jq
+- sed
+- sha256sum
+- shellspec (únicamente para ejecutar los tests)
+- xargs
+
 ## Configuración
 
 ```sh
@@ -65,4 +76,13 @@ Definiendo la variable DEBUG_CURL=1 antes de cada comando, se muestra el comando
 DEBUG_CURL=1 ./cli.sh api repertorio
 
 # curl --silent -X POST https://test.erp.ndorma.com/api/repertorio -H 'accept: application/json' -H 'Content-Type: application/json' -H 'usuario: 1' -H 'hash: 8b7f2076423ef84d44febf72718cbc73228107aa0d6d56da37aadac7783933ff'
+```
+
+---
+### Testing
+
+Ejecutar la test suite con
+
+```sh
+shellspec
 ```

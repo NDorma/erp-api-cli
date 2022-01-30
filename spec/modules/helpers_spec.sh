@@ -1,11 +1,62 @@
-source ./modules/helpers.sh 
-
 Describe "Test helper functions"
+  Include ./modules/helpers.sh 
+  Include ./modules/ui.sh
+
+  Describe "Test invoke_subcommand function"
+    It "returns error message with exit code 16 when no given sub-command"
+      When call invoke_subcommand
+      # Dump
+      The status should be failure
+      The output should include "Error code [16]"
+    End
+
+    It "returns error message with exit code 17 when no variable ERP_API_URL defined"
+      unset ERP_API_URL
+      When call invoke_subcommand
+      # Dump
+      The status should be failure
+      The output should include "Error code [17]"
+    End
+
+    It "returns error message with exit code 18 when no variable ERP_API_TOKEN defined"
+      unset ERP_API_TOKEN
+      When call invoke_subcommand
+      # Dump
+      The status should be failure
+      The output should include "Error code [18]"
+    End
+
+    It "returns error message with non-zero exit code when given sub-command does not exists"
+      When call invoke_subcommand unexistent-subcommand
+      # Dump
+      The status should be failure
+      The output should include ""
+      The stderr should include "unexistent-subcommand_: command not found"
+    End
+
+    It "success message when given ui cache-flush sub-command"
+      When call invoke_subcommand "ui" "cache-flush"
+      The status should be success
+    End
+  End
 
   Describe "Test do_hash function"
     It "returns the sha256 checksum of string"
       When call do_hash "claca"
       The output should eq "15e8a7d6bd9a1951aa08fd4a91ac18db4bff9d2d7db686504d11e8d59b89ab9d"
+    End
+  End
+
+  Describe "Test print_cli_error_message function"
+    It "returns error message of given code and status failure"
+      When call print_cli_error_message 33
+      The status should be failure
+      The stdout should include "Error code [33]"
+    End
+
+    It "returns no output and status success when code 0 is given"
+      When call print_cli_error_message 0
+      The status should be success
     End
   End
 
@@ -16,6 +67,7 @@ Describe "Test helper functions"
       The stderr should eq ""
       The stdout should eq ""
     End
+    
     It "returns success if response contains error: false"
       When call check_response_error "{\"error\": false}"
       The status should be success

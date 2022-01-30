@@ -2,6 +2,31 @@
 
 TMP_DIR=$(dirname "$(mktemp -u)")
 
+# ----------------------------- invoke subcommand ---------------------------- #
+
+invoke_subcommand() {
+    if [ ! "$ERP_API_URL" ]; then
+        print_cli_error_message 17
+        return
+    fi
+
+    if [ ! "$ERP_API_TOKEN" ]; then
+        print_cli_error_message 18
+        return
+    fi
+
+    if [ "$1" = "" ]; then
+        print_cli_error_message 16
+        return
+    fi
+
+    if [ "$(type -t "$1")" = function ]; then
+        eval "$1" "${*:2}"
+    else
+        eval "${1}_${*:2}"
+    fi
+}
+
 # ---------------------------- response functions ---------------------------- #
 
 check_response_error() {
@@ -9,8 +34,10 @@ check_response_error() {
     ERROR=$(echo "$RESPONSE" | jq .error)
 
     if [ "$ERROR" == true ]; then
-        return "$EACE_API_RESPONSE_ERROR"
+        return 20
     fi
+
+    return 0
 }
 
 print_response_errors() {
@@ -103,16 +130,20 @@ remember_content() {
 
 flush_cache() {
     find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2>/dev/null
+    return 0
 }
 
 # ------------------------- error handling functions ------------------------- #
 
 print_cli_error_message() {
-    _c r "Error code [$1]. "
-    if [ "${EACE_MESSAGES[$1]+keyexists}" ]; then
-        _c y "${EACE_MESSAGES[$1]}"
+    if [ "$1" != 0 ]; then
+        _c r "Error code [$1]. "
+        if [ "${EACE_MESSAGES[$1]+keyexists}" ]; then
+            _c y "${EACE_MESSAGES[$1]}"
+        fi
+        echo
     fi
-    echo
+
     return "$1"
 }
 

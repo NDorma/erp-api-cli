@@ -12,7 +12,7 @@ plain_request() {
 
 auth_request() {
     if ! check_credentials; then
-        return "$EACE_CREDENTIALS"
+        return 19
     fi
 
     USER_ID=$(get_user_id_from_credentials_file)
@@ -21,7 +21,7 @@ auth_request() {
     EXTRA_PARAMS="${*:2}"
     REQUEST=$(plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS")
     check_response_error "$REQUEST"
-    RETVAL="$?"
+    RETVAL=$?
     echo "$REQUEST"
     return $RETVAL
 }

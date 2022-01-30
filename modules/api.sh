@@ -3,7 +3,7 @@
 plain_request() {
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
-    if [ "$DEBUG_CURL" == 1 ]; then
+    if [ "$EAC_DEBUG_CURL" == 1 ]; then
         echo "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
     else
         eval "curl --silent -X POST $ERP_API_URL/$URL_PATH -H 'accept: application/json' -H 'Content-Type: application/json' $EXTRA_PARAMS"
@@ -12,14 +12,18 @@ plain_request() {
 
 auth_request() {
     if ! check_credentials; then
-        return "$ERROR_CREDENTIALS"
+        return "$EACE_CREDENTIALS"
     fi
 
     USER_ID=$(get_user_id_from_credentials_file)
     HASH=$(get_hash_from_credentials_file)
     URL_PATH="$1"
     EXTRA_PARAMS="${*:2}"
-    plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS"
+    REQUEST=$(plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS")
+    check_response_error "$REQUEST"
+    RETVAL="$?"
+    echo "$REQUEST"
+    return $RETVAL
 }
 
 api_authcheck() {

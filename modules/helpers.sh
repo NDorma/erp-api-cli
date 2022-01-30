@@ -8,7 +8,9 @@ check_response_error() {
     RESPONSE="$*"
     ERROR=$(echo "$RESPONSE" | jq .error)
 
-    [ "$ERROR" == false ]
+    if [ "$ERROR" == true ]; then
+        return "$EACE_API_RESPONSE_ERROR"
+    fi
 }
 
 print_response_errors() {
@@ -105,15 +107,20 @@ flush_cache() {
 
 # ------------------------- error handling functions ------------------------- #
 
+print_cli_error_message() {
+    _c r "Error code [$1]. "
+    if [ "${EACE_MESSAGES[$1]+keyexists}" ]; then
+        _c y "${EACE_MESSAGES[$1]}"
+    fi
+    echo
+    return "$1"
+}
+
 execute_and_check() {
     RESPONSE=$(eval "$*")
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
-        if [ $RETVAL == "$ERROR_CREDENTIALS" ]; then
-            echo "Error de credenciales, ejectuta '$0 ui login' nuevamente"
-        fi
-
-        echo "Error code [$RETVAL]"
+        print_cli_error_message $RETVAL
         return $RETVAL
     else
         echo "$RESPONSE"

@@ -9,20 +9,20 @@ source ./modules/ui.sh
 # ------------------------ environment variables check ----------------------- #
 
 if [ ! "$ERP_API_URL" ]; then
-    _cn r "env ERP_API_URL not defined"
-    exit 1
+    print_cli_error_message "$EACE_ENV_API_URL_NOT_DEFINED"
+    exit
 fi
 
 if [ ! "$ERP_API_TOKEN" ]; then
-    _cn r "env ERP_API_TOKEN not defined"
-    exit 1
+    print_cli_error_message "$EACE_ENV_API_TOKEN_NOT_DEFINED"
+    exit
 fi
 
 # ----------------------------- invoke subcommand ---------------------------- #
 
 if [ "$1" = "" ]; then
-    _cn r "no subcommand provided"
-    exit 1
+    print_cli_error_message "$EACE_SUBCOMMAND_MISSING"
+    exit
 fi
 
 if [ "$(type -t "$1")" = function ]; then

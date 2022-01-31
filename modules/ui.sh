@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+do_fzf() {
+    fzf --height 10 --header "$1" --reverse
+}
+
 ui_login() {
     if [ "$1" == "" ]; then
         read -r -p "Username:" USERNAME

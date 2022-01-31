@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
-
 do_hash() {
     echo -n "$*" | sha256sum | cut -d ' ' -f1
 }

@@ -2,10 +2,13 @@ Describe "Test helper functions"
   ERP_API_CLI_ENVIRONMENT="testing"
   ERP_API_CLI_TOKEN="token"
   
+  Include ./modules/variables.sh
   Include ./modules/helpers.sh 
   Include ./modules/ui.sh
+  Include ./modules/cache.sh
 
   Describe "Test invoke_subcommand function"
+
     It "returns error message with exit code 16 when no given sub-command"
       When call invoke_subcommand
       # Dump
@@ -44,6 +47,7 @@ Describe "Test helper functions"
   End
 
   Describe "Test do_hash function"
+    Include ./modules/credentials.sh
     It "returns the sha256 checksum of string"
       When call do_hash "claca"
       The output should eq "15e8a7d6bd9a1951aa08fd4a91ac18db4bff9d2d7db686504d11e8d59b89ab9d"

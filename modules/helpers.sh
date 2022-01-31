@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-TMP_DIR=$(dirname "$(mktemp -u)")
-
 # ----------------------------- invoke subcommand ---------------------------- #
 
 invoke_subcommand() {
@@ -67,46 +65,6 @@ format_response() {
     fi
 }
 
-# ------------------------------ cache functions ----------------------------- #
-
-get_cached_content() {
-    KEY="$1"
-    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
-
-    if [ -f "$CACHE_FILENAME" ]; then
-        cat "$CACHE_FILENAME"
-    fi
-}
-
-set_cached_content() {
-    KEY="$1"
-    CONTENT="${*:2}"
-    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
-    echo "$CONTENT" >"$CACHE_FILENAME"
-}
-
-remember_content() {
-    KEY="$1"
-    CALLABLE="${*:2}"
-    CACHE_FILENAME="$TMP_DIR/erp-api-cache.$KEY.tmp"
-
-    CONTENT=$(get_cached_content "$KEY")
-    if [ ! "$CONTENT" ]; then
-        if CONTENT="$($CALLABLE)"; then
-            set_cached_content "$KEY" "$CONTENT"
-        else
-            return $?
-        fi
-    fi
-
-    echo "$CONTENT"
-}
-
-flush_cache() {
-    find "$TMP_DIR/" -name "erp-api-cache.*" -print -delete 2>/dev/null
-    return 0
-}
-
 # ------------------------- error handling functions ------------------------- #
 
 print_cli_error_message() {
@@ -145,25 +103,9 @@ execute_and_check_oneliner() {
 
 # -------------------------------- ui funtions ------------------------------- #
 
-declare -A COLORS
-
-if [ "$(command -v tput)" ]; then
-    reset=$(tput sgr0)
-    COLORS[r]=$(tput setaf 1)
-    COLORS[g]=$(tput setaf 2)
-    COLORS[y]=$(tput setaf 3)
-    COLORS[b]=$(tput setaf 4)
-else
-    reset=""
-    COLORS[r]=""
-    COLORS[g]=""
-    COLORS[y]=""
-    COLORS[b]=""
-fi
-
 _c() {
     color=${COLORS[$1]}
-    echo -ne "$color${*:2}$reset"
+    echo -ne "$color${*:2}$RESET"
 }
 
 _cn() {
@@ -189,8 +131,4 @@ _confirm() {
     message=$(_c y "- $1" && echo " [y/N]")
     read -r -p "$message" response
     [ "$response" = "y" ]
-}
-
-do_fzf() {
-    fzf --height 10 --header "$1" --reverse
 }

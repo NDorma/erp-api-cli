@@ -33,6 +33,12 @@ export ERP_API_CLI_TOKEN="..."
 > 2. Ir a **Admin** > **API** > **Admin de la API** desde el menú superior.
 > 3. Copiar el token que se muestra en la sección **API token**
 
+## Uso
+
+```sh
+./cli comando sub-comando [argumentos]
+```
+
 ## Comandos
 
 ### Login

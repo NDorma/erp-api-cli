@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+ERP_API_CLI_DOCKER_IMAGE_NAME="erp-api-cli"
+
+if [[ "$(docker images -q "$ERP_API_CLI_DOCKER_IMAGE_NAME:latest" 2>/dev/null)" == "" ]]; then
+    docker build -t $ERP_API_CLI_DOCKER_IMAGE_NAME ./docker/cli
+fi
+
+docker run -it --rm \
+    -v "$PWD:/src" -v "$PWD/data/dcli/tmp:/tmp" \
+    -e ERP_API_TOKEN="$ERP_API_TOKEN" \
+    -e ERP_API_CLI_ENVIRONMENT="testing" \
+    $ERP_API_CLI_DOCKER_IMAGE_NAME \
+    "$1" "${*:2}"

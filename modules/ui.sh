@@ -81,3 +81,8 @@ ui_servicio-create() {
 ui_cache-flush() {
     flush_cache
 }
+
+ui_info (){
+    echo "Environment: [$ERP_API_CLI_ENVIRONMENT]"
+    echo "API URL: [$ERP_API_URL]"
+}

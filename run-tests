@@ -4,7 +4,7 @@
 source ./modules/helpers.sh
 
 docker-build() {
-    docker build -t test-erp-api-cli .
+    docker build -t test-erp-api-cli ./docker/testing
 }
 
 docker-run() {
@@ -12,11 +12,7 @@ docker-run() {
 }
 
 open-coverage() {
-    xdg-open ./coverage/index.html
+    xdg-open ./coverage/index.html 2> /dev/null
 }
 
-docker-build && docker-run
-
-if _confirm "Open coverage report?"; then
-    open-coverage &
-fi
+docker-build && docker-run && if _confirm "Open coverage report?"; then open-coverage; fi

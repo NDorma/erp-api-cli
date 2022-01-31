@@ -9,12 +9,13 @@ git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 ## Dependencias
 
 - curl
+- docker (únicamente para ejecutar los tests)
 - find
 - fzf
 - jq
+- ncurses (opcional)
 - sed
 - sha256sum
-- shellspec (únicamente para ejecutar los tests)
 - xargs
 
 ## Configuración
@@ -81,8 +82,8 @@ EAC_DEBUG_CURL=1 ./cli api repertorio
 ---
 ### Testing
 
-Ejecutar la test suite con
+Ejecutar tests
 
 ```sh
-shellspec
+./run-tests
 ```

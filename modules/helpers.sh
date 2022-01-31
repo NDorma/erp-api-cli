@@ -174,7 +174,6 @@ execute_and_check_oneliner() {
 declare -A COLORS
 
 if [ "$(command -v tput)" ]; then
-    echo "command \"tput\" exists on system"
     reset=$(tput sgr0)
     COLORS[r]=$(tput setaf 1)
     COLORS[g]=$(tput setaf 2)

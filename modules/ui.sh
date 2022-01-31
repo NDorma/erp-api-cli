@@ -92,4 +92,6 @@ ui_info() {
     echo "API Token  : [$ERP_API_CLI_TOKEN]"
     echo "User Id    : [$(get_user_id_from_credentials_file)]"
     echo "User Hash  : [$(get_hash_from_credentials_file)]"
+    echo "LANG       : [$LANG]"
+    echo "LC_CTYPE   : [$LC_CTYPE]"
 }

@@ -1,6 +1,6 @@
 Describe "Test helper functions"
-  ERP_API_URL="url"
-  ERP_API_TOKEN="token"
+  ERP_API_CLI_ENVIRONMENT="testing"
+  ERP_API_CLI_TOKEN="token"
   
   Include ./modules/helpers.sh 
   Include ./modules/ui.sh
@@ -13,16 +13,16 @@ Describe "Test helper functions"
       The output should include "Error code [16]"
     End
 
-    It "returns error message with exit code 17 when no variable ERP_API_URL defined"
-      unset ERP_API_URL
+    It "returns error message with exit code 17 when no variable ERP_API_CLI_ENVIRONMENT defined"
+      unset ERP_API_CLI_ENVIRONMENT
       When call invoke_subcommand
       # Dump
       The status should be failure
       The output should include "Error code [17]"
     End
 
-    It "returns error message with exit code 18 when no variable ERP_API_TOKEN defined"
-      unset ERP_API_TOKEN
+    It "returns error message with exit code 18 when no variable ERP_API_CLI_TOKEN defined"
+      unset ERP_API_CLI_TOKEN
       When call invoke_subcommand
       # Dump
       The status should be failure

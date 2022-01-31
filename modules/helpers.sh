@@ -5,12 +5,14 @@ TMP_DIR=$(dirname "$(mktemp -u)")
 # ----------------------------- invoke subcommand ---------------------------- #
 
 invoke_subcommand() {
-    if [ ! "$ERP_API_URL" ]; then
+    if [ ! "$ERP_API_CLI_ENVIRONMENT" ]; then
         print_cli_error_message 17
         return
     fi
 
-    if [ ! "$ERP_API_TOKEN" ]; then
+    export ERP_API_URL="${ERP_API_URLS[$ERP_API_CLI_ENVIRONMENT]}"
+
+    if [ ! "$ERP_API_CLI_TOKEN" ]; then
         print_cli_error_message 18
         return
     fi
@@ -90,7 +92,7 @@ get_user_id_from_credentials_file() {
 
 get_hash_from_credentials_file() {
     USER_TOKEN=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2)
-    do_hash "$ERP_API_TOKEN$USER_TOKEN"
+    do_hash "$ERP_API_CLI_TOKEN$USER_TOKEN"
 }
 
 # ------------------------------ cache functions ----------------------------- #

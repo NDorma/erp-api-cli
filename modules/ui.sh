@@ -84,5 +84,8 @@ ui_cache-flush() {
 
 ui_info (){
     echo "Environment: [$ERP_API_CLI_ENVIRONMENT]"
-    echo "API URL: [$ERP_API_URL]"
+    echo "API URL    : [$ERP_API_URL]"
+    echo "API Token  : [$ERP_API_CLI_TOKEN]"
+    echo "User Id    : [$(get_user_id_from_credentials_file)]"
+    echo "User Hash  : [$(get_hash_from_credentials_file)]"
 }

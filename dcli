@@ -8,7 +8,7 @@ fi
 
 docker run -it --rm \
     -v "$PWD:/src" -v "$PWD/data/dcli/tmp:/tmp" \
-    -e ERP_API_TOKEN="$ERP_API_TOKEN" \
-    -e ERP_API_CLI_ENVIRONMENT="testing" \
+    -e ERP_API_CLI_TOKEN="$ERP_API_CLI_TOKEN" \
+    -e ERP_API_CLI_ENVIRONMENT="$ERP_API_CLI_ENVIRONMENT" \
     $ERP_API_CLI_DOCKER_IMAGE_NAME \
     "$1" "${*:2}"

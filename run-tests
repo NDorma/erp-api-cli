@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1091
+source ./modules/helpers.sh
+
+docker-build() {
+    docker build -t test-erp-api-cli .
+}
+
+docker-run() {
+    docker run -it --rm -u "$(id -u):$(id -g)" -v "$PWD:/src" test-erp-api-cli
+}
+
+open-coverage() {
+    xdg-open ./coverage/index.html
+}
+
+docker-build && docker-run
+
+if _confirm "Open coverage report?"; then
+    open-coverage &
+fi

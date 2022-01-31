@@ -1,4 +1,7 @@
 Describe "Test helper functions"
+  ERP_API_URL="url"
+  ERP_API_TOKEN="token"
+  
   Include ./modules/helpers.sh 
   Include ./modules/ui.sh
 

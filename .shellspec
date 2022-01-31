@@ -1,4 +1,6 @@
---require spec_helper --shell /bin/bash
+--require "spec_helper"
+--shell "/bin/bash"
+--kcov
 
 ## Default kcov (coverage) options
 # --kcov-options "--include-path=. --path-strip-level=1"

@@ -171,13 +171,22 @@ execute_and_check_oneliner() {
 
 # -------------------------------- ui funtions ------------------------------- #
 
-reset=$(tput sgr0)
-
 declare -A COLORS
-COLORS[r]=$(tput setaf 1)
-COLORS[g]=$(tput setaf 2)
-COLORS[y]=$(tput setaf 3)
-COLORS[b]=$(tput setaf 4)
+
+if [ "$(command -v tput)" ]; then
+    echo "command \"tput\" exists on system"
+    reset=$(tput sgr0)
+    COLORS[r]=$(tput setaf 1)
+    COLORS[g]=$(tput setaf 2)
+    COLORS[y]=$(tput setaf 3)
+    COLORS[b]=$(tput setaf 4)
+else
+    reset=""
+    COLORS[r]=""
+    COLORS[g]=""
+    COLORS[y]=""
+    COLORS[b]=""
+fi
 
 _c() {
     color=${COLORS[$1]}

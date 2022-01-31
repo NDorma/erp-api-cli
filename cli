@@ -3,6 +3,7 @@
 # shellcheck disable=SC1091
 source ./modules/variables.sh
 source ./modules/helpers.sh
+source ./modules/credentials.sh
 source ./modules/api.sh
 source ./modules/ui.sh
 

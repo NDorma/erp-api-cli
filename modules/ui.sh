@@ -14,7 +14,7 @@ ui_login() {
 }
 
 ui_logout() {
-    rm "$CREDENTIALS_FILE"
+    rm_credentials_file
 }
 
 ui_sitios() {
@@ -82,7 +82,7 @@ ui_cache-flush() {
     flush_cache
 }
 
-ui_info (){
+ui_info() {
     echo "Environment: [$ERP_API_CLI_ENVIRONMENT]"
     echo "API URL    : [$ERP_API_URL]"
     echo "API Token  : [$ERP_API_CLI_TOKEN]"

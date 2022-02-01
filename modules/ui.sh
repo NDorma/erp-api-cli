@@ -17,6 +17,12 @@ ui_login() {
     format_response "$RESPONSE" && save_credentials_from_response "$RESPONSE"
 }
 
+ui_sessioncheck() {
+    USER_TOKEN=$(get_user_token_from_credentials_file)
+    USER_HASH=$(get_hash_from_credentials_file)
+    api_sessioncheck "$USER_TOKEN" "$USER_HASH"
+}
+
 ui_logout() {
     rm_credentials_file
 }
@@ -91,6 +97,7 @@ ui_info() {
     echo "API URL    : [$ERP_API_URL]"
     echo "API Token  : [$ERP_API_CLI_TOKEN]"
     echo "User Id    : [$(get_user_id_from_credentials_file)]"
+    echo "User Token : [$(get_user_token_from_credentials_file)]"
     echo "User Hash  : [$(get_hash_from_credentials_file)]"
     echo "LANG       : [$LANG]"
     echo "LC_CTYPE   : [$LC_CTYPE]"

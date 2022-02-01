@@ -26,6 +26,10 @@ auth_request() {
     return $RETVAL
 }
 
+api_sessioncheck() {
+    plain_request "user/sessioncheck" -d "'{\"user_token\": \"$1\", \"hash\": \"$2\"}'"
+}
+
 api_authcheck() {
     plain_request "user/authcheck" -d "'{\"username\": \"$1\", \"password\": \"$2\"}'"
 }

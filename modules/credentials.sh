@@ -23,7 +23,11 @@ get_user_id_from_credentials_file() {
     cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f1
 }
 
+get_user_token_from_credentials_file() {
+    cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2
+}
+
 get_hash_from_credentials_file() {
-    USER_TOKEN=$(cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2)
+    USER_TOKEN=$(get_user_token_from_credentials_file)
     do_hash "$ERP_API_CLI_TOKEN$USER_TOKEN"
 }

@@ -6,10 +6,9 @@
 git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 ```
 
-## Dependencias
+## Dependencias (sin docker)
 
 - curl
-- docker (para ejecutar tests y dcli)
 - find
 - fzf
 - jq
@@ -17,6 +16,10 @@ git clone https://github.com/ndorma/erp-api-cli.git && cd erp-api-cli
 - sed
 - sha256sum
 - xargs
+
+## Dependencias (con docker)
+
+- docker (para ejecutar tests y dcli)
 
 ## Configuración
 
@@ -39,13 +42,16 @@ export ERP_API_CLI_TOKEN="..."
 ./cli comando sub-comando [argumentos]
 ```
 
-## Comandos
+> Ver uso con [docker](#docker)
+
+## Comandos UI
 
 ### Login
 
 ```sh
 ./cli ui login [username]
 ```
+
 > Introducir nombre de usuario (opcional) y contraseña será solicitada luego
 
 ### Logout
@@ -59,6 +65,7 @@ export ERP_API_CLI_TOKEN="..."
 ```sh
 ./cli ui servicio-create
 ```
+
 > Seleccionar sitio, sala, tipo de servicio, rito, fecha, hora, difunto y repertorio (opcional)
 
 ### Buscador / selector interactivo de piezas
@@ -73,6 +80,14 @@ export ERP_API_CLI_TOKEN="..."
 ./cli ui cache-flush
 ```
 
+## <a id="docker"></a>Ejecutando la aplicación con Docker
+
+Es posible ejecutar la versión _dockerizada_ de la aplicación, la cual incluye todas las dependencias instaladas.
+
+```sh
+./dcli comando sub-comando [argumentos]
+```
+
 ---
 
 ## Debugging CURL
@@ -85,14 +100,8 @@ EAC_DEBUG_CURL=1 ./cli api repertorio
 # curl --silent -X POST https://test.erp.ndorma.com/api/repertorio -H 'accept: application/json' -H 'Content-Type: application/json' -H 'usuario: 1' -H 'hash: 8b7f2076423ef84d44febf72718cbc73228107aa0d6d56da37aadac7783933ff'
 ```
 
-## Ejecutando la aplicación con Docker
-
-```sh
-./dcli comando sub-comando [argumentos]
-```
-
-
 ---
+
 ### Testing
 
 Ejecutar tests

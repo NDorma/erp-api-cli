@@ -39,7 +39,7 @@ api_repertorio() {
 }
 
 api_sitios() {
-    auth_request "servicio/get/sitios"
+    auth_request "servicio/get/sitios" -d "'{\"full\": \"1\"}'"
 }
 
 api_salas() {

@@ -40,6 +40,10 @@ ui_repertorio() {
             | cut -d '|' -f1 | xargs | sed -e 's/ /,/g'"
 }
 
+ui_servicio-info() {
+    execute_and_check_oneliner "api_servicio-info $1" "jq -r \".data.servicio | {uuid: .uuid, expediente: .expediente, fecha: .fecha, hora: .hora, sitio: .sitio.nombre, sala: .sala.nombre, interpretes: .interpretes.nombre, rito: .rito.nombre, estado: .estado.nombre, difunto: .nombre_difunto, repertorio: [.repertorio[].nombre], obervaciones: .observaciones, observaciones_comercial: .observaciones_comercial, entornos: [.sitio.entornos[].nombre]}\""
+}
+
 ui_servicio-create() {
     if ! ID_SITIO=$(execute_and_check_oneliner "api_sitios" "jq -r \".data.sitios[] | [.id, .nombre] | @tsv\" | do_fzf 'Seleccione el sitio' | cut -f1"); then
         echo "$ID_SITIO"

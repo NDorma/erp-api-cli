@@ -55,6 +55,11 @@ api_ritos() {
     auth_request "servicio/get/ritos"
 }
 
+api_servicio-info() {
+    local N_FAX="$1"
+    auth_request "servicio/get/info/$N_FAX" -d "'{\"full\": \"1\"}'"
+}
+
 api_servicio-create() {
     options=$(getopt --name "api servicio-create" --options f:h:s:t:l:i:r:d:q: --longoptions fecha:,hora:,sitio:,sala:,lugar:,interpretes:,rito:,difunto:,repertorio: -- "$@")
     if [ $? != 0 ]; then

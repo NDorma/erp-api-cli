@@ -38,3 +38,7 @@ remember_content() {
 flush_cache() {
     find "$TMP_DIR/" -name "$CACHE_FILENAME_PREFIX.*" -print -delete 2>/dev/null
 }
+
+cache-flush() {
+    flush_cache
+}

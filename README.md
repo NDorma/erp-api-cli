@@ -69,13 +69,13 @@ eac api ritos
 ### Info
 
 ```sh
-eac ui info
+eac info
 ```
 
 ### Login
 
 ```sh
-eac ui login [username]
+eac login [username]
 ```
 
 > Introducir nombre de usuario (opcional) y contraseña será solicitada luego
@@ -83,7 +83,7 @@ eac ui login [username]
 ### Logout
 
 ```sh
-eac ui logout
+eac logout
 ```
 
 ### Creación interactiva de servicios
@@ -104,7 +104,7 @@ eac ui repertorio
 ### Limpiar la cache
 
 ```sh
-eac ui cache-flush
+eac cache-flush
 ```
 
 ## <a id="docker"></a>Ejecutando la aplicación con Docker

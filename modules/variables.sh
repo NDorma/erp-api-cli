@@ -3,7 +3,7 @@
 COMMAND=$(basename "$0")
 declare -A EACE_MESSAGES
 EACE_MESSAGES[16]="No sub-command provided"
-EACE_MESSAGES[19]="Error de credenciales, ejectuta '$COMMAND ui login' nuevamente"
+EACE_MESSAGES[19]="Error de credenciales, ejectuta el comando '$COMMAND login'"
 EACE_MESSAGES[20]="Error en la respuesta de la API"
 EACE_MESSAGES[17]="env ERP_API_CLI_ENVIRONMENT not defined"
 EACE_MESSAGES[18]="env ERP_API_CLI_TOKEN not defined"

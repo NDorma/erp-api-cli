@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 get_cache_filename() {
-    echo "$TMP_DIR/$CACHE_FILENAME_PREFIX.$1"
+    USER_ID=$(get_user_id_from_credentials_file)
+    echo "$TMP_DIR/$CACHE_FILENAME_PREFIX.user-$USER_ID.$1"
 }
 
 get_cached_content() {

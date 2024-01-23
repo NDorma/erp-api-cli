@@ -5,7 +5,16 @@ do_hash() {
 }
 
 check_credentials() {
-    [ -f "$CREDENTIALS_FILE" ]
+    if [ -f "$CREDENTIALS_FILE" ]; then
+        return 0
+    fi
+
+    print_cli_error_message 19
+    return 19
+}
+
+read_credentials() {
+    cat "$CREDENTIALS_FILE"
 }
 
 save_credentials_from_response() {
@@ -18,16 +27,22 @@ rm_credentials_file() {
 }
 
 get_user_id_from_credentials_file() {
-    cat <"$CREDENTIALS_FILE" | jq --raw-output .data.usuario.id
+    check_credentials && read_credentials | jq --raw-output .data.usuario.id
 }
 
 get_user_token_from_credentials_file() {
-    cat <"$CREDENTIALS_FILE" | jq --raw-output .data.usuario.token
+    check_credentials && read_credentials | jq --raw-output .data.usuario.token
+}
+
+get_user_name() {
+    check_credentials && read_credentials | jq --raw-output .data.usuario.nombre
 }
 
 get_hash_from_credentials_file() {
-    USER_TOKEN=$(get_user_token_from_credentials_file)
-    do_hash "$ERP_API_CLI_TOKEN$USER_TOKEN"
+    check_credentials && (
+        USER_TOKEN=$(get_user_token_from_credentials_file)
+        do_hash "$ERP_API_CLI_TOKEN$USER_TOKEN"
+    )
 }
 
 login() {
@@ -62,6 +77,7 @@ info() {
     echo "API Token  : [$ERP_API_CLI_TOKEN]"
     echo "Credentials: [$CREDENTIALS_FILE]"
     echo "User Id    : [$(get_user_id_from_credentials_file)]"
+    echo "User Name  : [$(get_user_name)]"
     echo "User Token : [$(get_user_token_from_credentials_file)]"
     echo "User Hash  : [$(get_hash_from_credentials_file)]"
     echo "LANG       : [$LANG]"

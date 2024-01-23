@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 get_cache_filename() {
-    echo "$TMP_DIR/$CACHE_FILENAME_PREFIX.$1.tmp"
+    echo "$TMP_DIR/$CACHE_FILENAME_PREFIX.$1"
 }
 
 get_cached_content() {
-    CACHE_FILENAME=$(get_cache_filename "$KEY")
+    CACHE_FILENAME=$(get_cache_filename "$1")
 
     if [ -f "$CACHE_FILENAME" ]; then
         cat "$CACHE_FILENAME"
@@ -37,5 +37,4 @@ remember_content() {
 
 flush_cache() {
     find "$TMP_DIR/" -name "$CACHE_FILENAME_PREFIX.*" -print -delete 2>/dev/null
-    return 0
 }

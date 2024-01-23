@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC1091
+
+APP_PATH="$(realpath "$(dirname "$0")")"
+MODULES_PATH="$(realpath "$APP_PATH/../modules")"
+
+source "$MODULES_PATH"/variables.sh
+source "$MODULES_PATH"/helpers.sh
+source "$MODULES_PATH"/credentials.sh
+source "$MODULES_PATH"/cache.sh
+source "$MODULES_PATH"/api.sh
+source "$MODULES_PATH"/ui.sh
+
+# ------------------------ environment variables check ----------------------- #
+
+invoke_subcommand "$1" "${*:2}"

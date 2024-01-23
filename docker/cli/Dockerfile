@@ -13,4 +13,4 @@ ENV LANGUAGE en_US.UTF-8
 
 WORKDIR /src
 
-ENTRYPOINT [ "./cli" ]
+CMD [ "./bin/eac" ]

@@ -35,5 +35,5 @@ fi
 export COLORS
 export RESET
 
-export CACHE_FILENAME_PREFIX="erp-api-cache"
-export CREDENTIALS_FILE="$TMP_DIR/erp-api-credentials.tmp"
+export CACHE_FILENAME_PREFIX="erp-api-cli.cache"
+export CREDENTIALS_FILE="$TMP_DIR/erp-api-cli.session.json"

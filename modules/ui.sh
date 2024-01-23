@@ -33,11 +33,11 @@ ui_sitios() {
 
 ui_repertorio() {
     execute_and_check_oneliner \
-        "remember_content repertorio api_repertorio" \
+        "remember_content repertorio.json api_repertorio" \
         "jq -r \".data.piezas[] | [.id, .nombre, .autor] | @tsv\" \
             | sed 's/\t/@|@/g' | column -s '@' -t \
             | fzf --multi --reverse --preview \"echo Repertorio seleccionado:; cat {+f}\" --header 'multiselección con TAB' \
-            | cut -d '|' -f1 | xargs | sed -e 's/ /,/g'"
+        | cut -d '|' -f1 | xargs | sed -e 's/ /,/g'"
 }
 
 ui_servicio-info() {
@@ -97,9 +97,13 @@ ui_cache-flush() {
 }
 
 ui_info() {
+    echo "App path   : [$APP_PATH]"
+    echo "Modules dir: [$MODULES_PATH]"
+
     echo "Environment: [$ERP_API_CLI_ENVIRONMENT]"
     echo "API URL    : [$ERP_API_URL]"
     echo "API Token  : [$ERP_API_CLI_TOKEN]"
+    echo "Credentials: [$CREDENTIALS_FILE]"
     echo "User Id    : [$(get_user_id_from_credentials_file)]"
     echo "User Token : [$(get_user_token_from_credentials_file)]"
     echo "User Hash  : [$(get_hash_from_credentials_file)]"

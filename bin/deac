@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
 ERP_API_CLI_DOCKER_IMAGE_NAME="erp-api-cli"
+APP_PATH="$(realpath "$(dirname "$0")")"
+REPO_ROOT="$(realpath "$APP_PATH"/..)"
 
 if [[ "$(docker images -q "$ERP_API_CLI_DOCKER_IMAGE_NAME:latest" 2>/dev/null)" == "" ]]; then
-    docker build -t $ERP_API_CLI_DOCKER_IMAGE_NAME ./docker/cli
+    docker build -t $ERP_API_CLI_DOCKER_IMAGE_NAME "$REPO_ROOT"/docker/cli
 fi
 
 docker run -it --rm \
-    -v "$PWD:/src" -v "$PWD/data/dcli/tmp:/tmp" \
+    -v "$REPO_ROOT:/src" \
+    -v "$REPO_ROOT/data/dcli/tmp:/tmp" \
     -e ERP_API_CLI_TOKEN="$ERP_API_CLI_TOKEN" \
     -e ERP_API_CLI_ENVIRONMENT="$ERP_API_CLI_ENVIRONMENT" \
     $ERP_API_CLI_DOCKER_IMAGE_NAME \
-    "$1" "${*:2}"
+    ./bin/eac "$@"

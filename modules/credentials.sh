@@ -10,9 +10,7 @@ check_credentials() {
 
 save_credentials_from_response() {
     RESPONSE="$*"
-    USER_TOKEN=$(echo "$RESPONSE" | jq --raw-output .data.usuario.token)
-    USER_ID=$(echo "$RESPONSE" | jq --raw-output .data.usuario.id)
-    echo "$USER_ID|$USER_TOKEN" >"$CREDENTIALS_FILE"
+    echo "$RESPONSE" >"$CREDENTIALS_FILE"
 }
 
 rm_credentials_file() {
@@ -20,11 +18,11 @@ rm_credentials_file() {
 }
 
 get_user_id_from_credentials_file() {
-    cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f1
+    cat <"$CREDENTIALS_FILE" | jq --raw-output .data.usuario.id
 }
 
 get_user_token_from_credentials_file() {
-    cat <"$CREDENTIALS_FILE" | head -n1 | cut -d '|' -f2
+    cat <"$CREDENTIALS_FILE" | jq --raw-output .data.usuario.token
 }
 
 get_hash_from_credentials_file() {

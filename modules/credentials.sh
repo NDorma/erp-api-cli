@@ -5,15 +5,15 @@ do_hash() {
 }
 
 check_credentials() {
-    if [ -f "$CREDENTIALS_FILE" ]; then
-        return 0
-    fi
-
-    print_cli_error_message 19
-    return 19
+    [ -f "$CREDENTIALS_FILE" ]
 }
 
 read_credentials() {
+    if ! check_credentials; then
+        print_cli_error_message 19
+        return 19
+    fi
+
     cat "$CREDENTIALS_FILE"
 }
 

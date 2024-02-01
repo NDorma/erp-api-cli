@@ -20,7 +20,7 @@ invoke_subcommand() {
         return
     fi
 
-    if [ "$(type -t "$1")" = function ]; then
+    if [ "$(type -t "$1")" = "function" ]; then
         eval "$1" "${*:2}"
     else
         eval "${1}_${*:2}"
@@ -84,6 +84,10 @@ execute_and_check() {
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
         print_cli_error_message $RETVAL
+
+        if [ $RETVAL -eq 20 ]; then
+            print_response_errors "$RESPONSE"
+        fi
         return $RETVAL
     else
         echo "$RESPONSE"

@@ -19,7 +19,17 @@ auth_request() {
     USER_ID=$(get_user_id_from_credentials_file)
     HASH=$(get_hash_from_credentials_file)
     URL_PATH="$1"
-    EXTRA_PARAMS="${*:2}"
+    # EXTRA_PARAMS="${*:2}"
+
+    # if there is input from stdin, read it from it, otherwise from arguments. put those in EXTRA_PARAMS:
+    if [ -t 0 ]; then
+        EXTRA_PARAMS="${*:2}"
+    else
+        EXTRA_PARAMS="-d '$(< /dev/stdin)' ${*:2}"
+    fi
+
+
+
     REQUEST=$(plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS")
     check_response_error "$REQUEST"
     RETVAL=$?

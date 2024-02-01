@@ -28,8 +28,6 @@ auth_request() {
         EXTRA_PARAMS="-d '$(< /dev/stdin)' ${*:2}"
     fi
 
-
-
     REQUEST=$(plain_request "$URL_PATH" "-H 'usuario: $USER_ID' -H 'hash: $HASH' $EXTRA_PARAMS")
     check_response_error "$REQUEST"
     RETVAL=$?
@@ -43,6 +41,10 @@ api_sessioncheck() {
 
 api_authcheck() {
     plain_request "user/authcheck" -d "'{\"username\": \"$1\", \"password\": \"$2\"}'"
+}
+
+api_echo() {
+    auth_request "echo" -d "'{\"response\": \"$1\"}'"
 }
 
 api_repertorio() {

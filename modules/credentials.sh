@@ -82,4 +82,6 @@ info() {
     echo "User Hash  : [$(get_hash_from_credentials_file)]"
     echo "LANG       : [$LANG]"
     echo "LC_CTYPE   : [$LC_CTYPE]"
+
+    echo "Echo 'test': [$(api_echo "test" | jq .data.response)]"
 }

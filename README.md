@@ -46,24 +46,6 @@ eac comando sub-comando [argumentos]
 
 > Ver uso con [docker](#docker)
 
-## Comandos API
-
-### Crear servicio
-
-```sh
-eac api servicio-create --sitio=11 --sala=82 --fecha=2020-01-01 --hora=10:00 --difunto="test" --interpretes=1 --rito=1 | jq ".messages, .errors"
-```
-
-### Listados de recursos
-
-```sh
-eac api sitios
-eac api salas
-eac api repertorio
-eac api interpretes
-eac api ritos
-```
-
 ## Comandos UI
 
 ### Info
@@ -105,6 +87,42 @@ eac ui repertorio
 
 ```sh
 eac cache-flush
+```
+
+---
+
+## Comandos API
+
+### Echo test
+
+```sh
+eac api echo test
+```
+
+### Crear servicio
+
+```sh
+eac api servicio-create --sitio=11 --sala=82 --fecha=2020-01-01 --hora=10:00 --difunto="test" --interpretes=1 --rito=1 | jq ".messages, .errors"
+
+# or
+
+cat servicio.json | eac api auth_request "servicio/create" | jq ".messages, .errors"
+```
+
+### Info de servicio
+
+```sh
+eac api servicio-info 221122
+```
+
+### Listados de recursos
+
+```sh
+eac api sitios
+eac api salas
+eac api repertorio
+eac api interpretes
+eac api ritos
 ```
 
 ## <a id="docker"></a>Ejecutando la aplicación con Docker
